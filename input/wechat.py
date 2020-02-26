@@ -6,6 +6,7 @@ import requests
 import re
 import random
 import infoProcess.wechat_info as wechat_info
+import tool.infoTool as info_T
 
 def login(account_name,password):
     # 用webdriver启动谷歌浏览器
@@ -33,7 +34,6 @@ def login(account_name,password):
     print("请拿手机扫码二维码登录公众号")
     time.sleep(20)
     print("登录成功")
-    # cookies = driver.get_cookies()
     # 获取cookies
     cookie_items = driver.get_cookies()
     post = {}
@@ -114,7 +114,7 @@ def get_Content(query,cookies,session):
         params=query_id_data)
     fakeid_list = query_fakeid_response.json().get('app_msg_list')
     link = fakeid_list[0].get('link')
-    title = fakeid_list[0].get('title')
+    title = info_T.remove_punctuation(fakeid_list[0].get('title'))
     content = wechat_info.html_to_mySoup(session.get(link, cookies=cookies, verify=False).content)
     #获取文章路径
     print('获取文章路径: ' + link)
